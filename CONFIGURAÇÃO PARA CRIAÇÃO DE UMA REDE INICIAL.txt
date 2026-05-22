@@ -1,0 +1,5 @@
+1 Create an RF Domain.
+2 Create a controller profile, with WLAN, VLAN and GE interface configurations.
+3 Create a access point profile.
+4 Create a DHCP server policy.
+5 Test your WLAN status.

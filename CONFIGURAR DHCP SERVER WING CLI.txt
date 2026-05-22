@@ -1,0 +1,15 @@
+WLC#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+WLC(config)#dhcp-server-policy vlan1
+WLC(config-dhcp-policy-vlan1)#dhcp-pool vlan1
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#network A.B.C.D/M  Network number and Mask
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#address range x.x.x.x y.y.y.y
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#default-router A.B.C.D Router's IP address
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#​dns-server x.x.x.x
+
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#commit write
+
+Apply the newly created DHCP policy
+WLC(config)#self
+WLC(config-device-B4-C7-99-6D-CF-45)#use dhcp-server-policy vlan1
+WLC(config-device-B4-C7-99-6D-CF-45)#commit write

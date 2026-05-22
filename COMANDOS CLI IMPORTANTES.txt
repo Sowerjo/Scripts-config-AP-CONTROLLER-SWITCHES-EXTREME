@@ -1,0 +1,536 @@
+LOGIN DE REDEFINIÇÃO DE FABRICA
+
+WiNG 4.X Software
+
+Username: restore
+Password: restoreDefaultPassword
+
+WiNG 4.3.X Software
+ 
+-Get console access to the controller.
+-Boot the controller
+-Press escape to access boot> prompt
+-Type ‘set factory_defaults’ and accept the change.  Note: licenses will be deleted from the switch.
+-Enter ‘go’ to reboot switch
+-At boot prompt, enter cli to access the command line
+-Enter the default password.  Note: For 4.3, the default admin password is superuser
+
+WiNG 5.X Software
+
+Username: reset
+Password: FactoryDefault
+
+AP 650
+
+login as: reset
+password: paSSw0rd^
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ACESSAR DISPOSITIVO APOS O LOGIN
+enable
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER INFORMAÇOES DO DISPOSITIVO SELECIONADO
+show context
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER TABELA DE AP'S  E MACS NA REDE
+show wireless ap configured
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FACTORY RESET AP e CONTROLLER
+erase startup-config
+ou
+delete startup-config
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SENHA PADRAO APOS O FACTORY RESET OU PRIMEIRA INICIALIZAÇÃO
+admin
+admin123
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTERAR SENHA DE ACESSO APÓS O LOGIN
+change-passwd
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+REINICIAR DIPOSITIVO
+reload
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER INFORMAÇÕES DE IPV4 DO DISPOSITIVO DENTRO DA RFS
+show wireless ap on TechPubs
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTERAR VLAN DA PORTA GE1
+self
+interface ge1
+switchport "trunk" ou "acess" native vlan "XX"
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VERIFICAR ENDEREÇO DE ACESSO VIA BROWSER
+self
+interface vlan 1
+show context
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DEFINIR ENDEREÇO DE IP DA VLAN1 (endereço de acesso a gerencia via browser)
+self
+interface vlan 1
+ip address xxx.xxx.xx.x/24
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ATUALIZAR FIRMWARE DENTRO DE UM AP
+FTP
+1 digite: Upgrade ftp://<username>:<password>@<ftp-server-IP>/filename.img. 
+exemplo:upgrade ftp://mobility:12345678@192.168.15.72:21/AP6532-5.9.1.10-002R.img
+​2  apos a conclusao digite reload depois pressione Enter e espere reiniciar
+
+TFTP
+upgrade tftp://<ip>/nome do arquivo.img
+
+USB
+upgrade usb1:/RFS6000-4.4.1.0-008R.img
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MUDAR INTERFACE DO AP PARA WING PADRÃO
+
+profile apXXXX default-apXXXX
+use enterprise-ui
+commit write
+..
+..
+reload
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER STATUS DA ADOÇÃO DO AP COM A RFS 
+show adoption status
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FORÇAR ADOÇÃO DE UM AP NA RFS (deve ser executado dentro do ap)
+
+self
+Controller host (IP da RFS)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FAZER LOGIN EM UM AP VIA RFS
+
+connect (ip)
+ou
+connect mint-id (mint id)
+ou 
+connect (nome do AP)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER MINT ID DO AP
+
+show mint neighbors
+ou
+show mint links
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTERAR POTENCIA DE UM AP (deve ser executado dentro do ap)
+ 
+tenha em mente que o radio1 e referente ao radio 2.4, e radio2 e referente ao radio de 5Ghz 
+
+self
+interface radio1 ou radio2
+power (1 a 30)
+commit write
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER INFORMAÇOES DE RADIO DE ALGUM AP
+
+show wireless radio
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER QUAL FIRMWARE ESTA SENDO INICIADO PRIMEIRO
+show boot
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTERAR QUAL FIRMWARE SERA INICIALIZADO NA PROXIMA REINICIALIZAÇÃO
+
+boot system secondary ou primary
+commit write
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER LISTA DE FIRMWARES DE APs PARA UPGRADE DENTRO DA RFS
+
+show device-upgrade version
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CARREGAR NOVA IMAGEM PARA UPGRADE APs DENTRO DA RFS
+
+#device-upgrade load-image APXXXX tftp://10.10.10.5/AP7532-5.8.5.0-016R.img
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ATUALIZAR APs COM AS IMAGENS DA RFS
+
+#device-upgrade APXXXX all
+
+  force---------Forçar atualização	
+  no-reboot---------Atualizar e nao reinicializar (reiniciar manualmente)
+  reboot-time---------Atualizar e agendar reinicialização
+  staggered-reboot---------Reinicie um de cada vez sem que a rede seja atingida
+  upgrade-time---------Agende um horário de atualização
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER STATUS DE ATUALIZAÇÃO DOS APs DENTRO DA RFS
+
+#show upgrade-status
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER ENDEREÇO IP DE TODAS AS INTERFACES
+
+#show interface
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+HABILITAR INTERFACE DE RADIO
+
+>en 
+#self 
+#int radio 1 (example: 1 is radio 1, 2 is radio 2 etc.)
+#no shut
+#com wr 
+#show context (confirm that it’s off) 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESABILITAR INTERFACE DE RADIO
+
+>en 
+#self 
+#int radio 1 (example: 1 is radio 1, 2 is radio 2 etc.)
+#shutdown
+#com wr 
+#show context (confirm that it’s off) 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER RF-DOMAIN MANAGER ATUAL DO DISPOSITIVO
+#show global domain managers
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTERAR NOME DO AP OU RFS
+
+self
+hostname (nome)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ATRIBUIR REDE CRIADA AOS RADIOS
+
+self
+interface radio 1
+wlan (nome do perfil de rede criado) bss 1 primary
+no shut
+com wr
+..
+interface radio 2
+wlan (nome do perfil de rede criado) bss 1 primary
+no shut
+com wr
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER STATUS DO RADIO DOS APs
+
+show wireless radio
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER STATUS DO RADIO EM UM RF-DOMAIN DIFERENTE
+
+show wireless radio on (NOME DO RF-DOMAIN)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER REDES ATRIBUIDAS AOS RADIOS DOS APs
+
+show wireless radio wlan-map
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESATIVAR CANAIS DFS (CANAIS DE VARREDURA) DA FREQUENCIA DE 5GHz e MELHORES CANAIS PARA FREQUENCIA DE 2.4
+
+config
+rf-domain
+channel-list 5GHz 36,40,44,48,149,153,157,161,165
+channel-list 2.4GHz 1,6,11
+com wr
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CHECAR STATUS DE USO DE MEMORIA
+
+#service show sysinfo
+#service show top
+#service show process
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BLOQUEAR UM MAC ADRESS ESPECIFICO
+
+1. Create an Association Policy.  Each rule in the policy will be for an individual MAC address or a range of MAC addresses. There is an implicit deny at the end so if you want to allow all others you need to add a permit all at the end (as seen below.) 
+ 
+
+#self
+#association-acl-policy ˜nome da politica cal sem aspas˜
+#deny ˜MAC address sem aspas˜ precedence 1
+#permit 00-00-00-00-00-00 FF-FF-FF-FF-FF-FF precedence 1000
+#Com wr
+..
+#Wlan ˜nome do perfil wlan existente sem aspas˜
+#Use association-all policy ˜nome da politica acl criada anteriormente sem aspas˜
+#Com wr
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DIRETORIO DE LOGS 
+
+#dir flash:/logs/
+#dir flash:/archived_logs/
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DELETAR ARQUIVOS 
+
+#delete flash:/archived_logs/*.log
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BACKUP E RESTAURAÇÃO DAS CONFIGS DA RFS
+
+TFTP
+
+Procedure
+Backup config
+Copy <source> <destination>
+Example:  
+copy running-config  tftp://<server-ip>/<file name>
+
+QUANDO O BACKUP FOR RESTAURADO O NOME DO ARQUIVO SEMPRE DEVERA SER (startup-config)
+Restore Config
+Copy <source> <destination>
+Example:  
+copy tftp://<server-ip>/<file name>  nvram:/startup-config
+
+USB
+
+backup config USB
+rfs6000-17E8F6#copy running-config usb1://<file name>
+
+QUANDO O BACKUP FOR RESTAURADO O NOME DO ARQUIVO SEMPRE DEVERA SER (startup-config)
+restore config USB
+rfs6000-17E8F6# copy usb1://<filename>  startup-config
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COMANDO PARA REMOVER AP INATIVO ADOTADO PELA RFS
+
+enable [enter]
+config [enter]
+no xxxx yy-yy-yy-yy-yy-yy [enter] (x represents the AP model and you can use ? after no for a list of AP model numbers and y represents AP mac address)
+commit write [enter]
+-------------------------------------------------------------------------------------------------------------------------------------
+DEFINIR GRUPO DE ANTENAS PARA APS DE ANTENA EXTERNA (ESSE COMANDO E NECESSARIO POIS SEM ESSA CONFIGURAÇÃO O RADIO NAO IRA OPERAR CORRETAMENTE)
+
+profile ap310 default-ap310 
+antenna-id external group-1 ml-2452-apa2-01
+antenna-id external group-2 ml-2452-apa2-02
+antenna-id external group-2 ml-2452-apa2-03
+
+commit write
+
+group1 e referente ao radio1 e group 2 e referente ao radio 2
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CRIANDO CLUSTER DO ZERO (REDUNDANCIA)
+
+NA CONTROLLER PRIMARIA OU SWITCH PRIMARIO ACESSE CONFIGURAÇÕES
+
+#en
+#self
+
+CONFIGURE O NOME DO CLUSTER E SUA PRIORIDADE, COMO REGRA SUA PRIORIDADE SEMPRE DEVE SER MAIOR QUE A DO SECUNDARIO (PADRAO 128 MAXIMO 255)
+
+#cluster name "nome_sem_aspas"
+#cluster master-priority 255
+#com wr
+
+CONFIGURE OS ENDEREÇOS DE IP DO CLUSTER, E DEFINA O SEU NIVEL DE ROTEAMENTO ONDE LEVEL 1 SERA PARA CLUSTER NO MESMO LOCAL, E LEVEL 2 SERA PARA CLUSTER ENTRE LOCALIDADES
+
+#cluster member ip xx.xx.xx.xx/xx level 1
+#cluster member ip xx.xx.xx.xx/xx level 1
+#cluster force-configured-state
+#cluster force-configured-state-delay 5
+#com wr
+
+FAÇA LOGIN NO CLI DA CONTROLLER SECUNDARIA E EXECUTE OS COMANDOS:
+
+#enable
+#join-cluster xx.xx.xx.xx/xx user admin password superuser mode standby
+#com wr
+
+OBSERVE QUE: 
+
+- "xx.xx.xx.xx/xx" é o IP do switch primário
+- "admin" é o nome de usuário admin do Switch Principal
+- "superusuário" é a senha de administrador do Switch Primário
+- Recomenda-se configurar como modo de espera para o cluster secundário.
+
+AGUARDE 5 MINUTOS E EXECUTE O SEGUINTE COMANDO NA CONTROLLER PRIMARIA
+
+#en
+#show cluster members
+rfs7000-76S> enable
+rfs7000-76S# show cluster members
+
+IRA MOSTRAR O SEGUINTE STATUS
+------------------------------------------------------------------------------------------
+    HOSTNAME     MEMBER-ID           MAC          MASTER OPERATIONAL-STATE   LAST-SEEN
+------------------------------------------------------------------------------------------
+  rfs7000-76P   19.6C.94.50   B4-C7-99-6C-94-50   False   standby           00:00:44 ago
+  rfs7000-76S   70.38.02.DE   00-15-70-38-02-DE   True    active            self
+------------------------------------------------------------------------------------------
+- Verifique se o comutador primário mostra Master = True
+- Verifique se a opção secundária mostra Master = False
+- Verifique se o Primário mostra Estado Operacional = Ativo e o Secundário mostra Estado Operacional = Em espera
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+COMO CRIAR UM SERVIÇO DE DHCP DO ZERO
+
+WLC#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+WLC(config)#dhcp-server-policy NOME
+WLC(config-dhcp-policy-vlan1)#dhcp-pool NOME
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#network 192.168.15.0/24  Network number and Mask
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#address range 192.168.15.1 192.168.15.254
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#default-router 192.168.15.1 Router's IP address
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#​dns-server 8.8.8.8 ou 8.8.4.4
+
+WLC(config-dhcp-policy-vlan1-pool-vlan1)#commit write
+
+Apply the newly created DHCP policy
+WLC(config)#self
+WLC(config-device-B4-C7-99-6D-CF-45)#use dhcp-server-policy NOME CRIADO 
+WLC(config-device-B4-C7-99-6D-CF-45)#commit write
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONFIGURANDO GATEWAY (ROUTERS)
+>en
+#self
+#ip default-gateway <DGW-IP-address>
+#com wr
+#sh context | include default-gateway
+#show ip default-gateways
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONFIGURANDO ROAMING ASSISTIDO
+
+Procedimento
+A configuração 802.11v bss-transition é suportada na CLI apenas atualmente.
+
+Este comando precisa ser digitado completamente na CLI a partir de agora - em wlan "802.11v bss-transition".
+
+
+Crie e use a política de assistência de roaming para ajudar com clientes fixos - roaming-assist-policy <nome> e defina condições para invocá-la.
+E então em wlan "use roaming-assist-policy <nome>.
+
+
+WLC>en
+WLC#config
+WLC(config)#wlan test
+WLC(config-wlan-test)#radio-resource-measurement
+WLC(config-wlan-test)#802.11v bss-transition
+
+WLC>en
+WLC#config
+WLC(config)#roaming-assist-policy test-roam
+WLC(config-roaming-assist-policy-test-roam)#?
+
+Roaming Assist Mode commands:
+  action               Configure action - action is deauth / log /
+                       assisted-roam
+  aggressiveness       Configure the roaming aggressiveness for a wireless
+                       client
+  detection-threshold  Configure the detection threshold - when exceeded,
+                       client monitoring starts
+  disassoc-time        Configure the disassociation time - time after which a
+                       disassociation is sent
+  handoff-count        Configure the handoff count - number of times client
+                       can exceed handoff threshold
+  handoff-threshold    Configure the handoff threshold - when exceeds an
+                       action is taken.
+  monitoring-interval  Configure the monitoring interval - interval at which
+                       client monitoring occurs
+  no                   Negate a command or set its defaults
+  sampling-interval    Configure the sampling interval - interval at which
+                       client rssi values are checked
+WLC(config)#wlan test
+WLC(config-wlan-test)#use roaming-assist-policy test-roam
+WLC(config-wlan-test)#comit write
+
+
+Notas adicionais
+O 802.11k deve estar habilitado no dispositivo para que o 802.11v funcione.
+O 802.11v precisa ser suportado e habilitado no cliente para funcionar.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER IPV4 DE TODOS OS APS 
+
+show wireless ap on "rfdomain"
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DIRETORIOS DA RFS QUE PODEM SER LIMPOS
+
+
+dir flash:/upgrade/willow.img
+dir flash:/archived_logs
+
+delete flash:/upgrade/willow.img
+delete flash:/archived_logs
+service clear crash-info
+remote-debug clear-crash-info rf-domain
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER INFORMAÇÕES DE MEMORIA DA RFS
+
+show file system
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LIMPAR INFORMAÇÕES DE CRASH DE TODOS OS APS
+
+remote-debug clear-crash-info rf-domain 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VER STATUS DO HARDWARE DE CONTROLADORA
+
+service show diag stats on "controller"
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONFIGURAR DEFAULT GATEWAY e DNS
+
+#self
+#ip default-gateway <DGW-IP-address>
+#com wr
+#sh context | include default-gateway
+#show ip default-gateways
+com wr
+
+DNS
+
+en
+self
+ip name-server xx.xx.xx.xx
+com wr
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CONFIGURANDO RF-DOMAIN
+location brasil
+contact (seu contato)
+timezone etc/GMT-3
+country-code br
+commit
+commit write
+commit write memory
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONVERTER AP HIVE OS PARA WING
+
+#_system boot-os WiNG
+#reboot
+
+CONVERTER AP WING PARA HIVE OS
+
+en
+operational-mode xiq-cloud force
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BLOQUEAR MAC ADDRESS ESPECIFICO DA REDE
+
+       1. Create an Association Policy.  Each rule in the policy will be for an individual MAC address or a range of MAC addresses. There is an implicit deny at the end so if you want to allow all others you need to add a permit all at the end (as seen below.) 
+ 
+!
+association-acl-policy Test
+deny 7C-50-49-57-A6-81 precedence 1
+permit 00-00-00-00-00-00 FF-FF-FF-FF-FF-FF precedence 1000
+!
+ 
+      2. Apply it to a WLAN
+
+ !CON
+wlan Test_SSID
+use association-acl-policy Test
+!
+
+     3. Commit and save
+
+
+
+enable
+config t
+association-acl-policy ACL_BLOCK_USERS_MOBILE
+deny 7C-50-49-57-A6-82 precedence 1
+com wr

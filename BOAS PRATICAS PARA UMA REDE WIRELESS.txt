@@ -1,0 +1,150 @@
+BOAS PRATICAS PARA WING
+POLITICAS DE FIREWALL
+
+#config t
+#firewall-policy <firewall-policy-name>
+
+no ip dos smurf
+no ip dos twinge
+no ip dos invalid-protocol
+no ip dos router-advt
+no ip dos router-solicit
+no ip dos option-route
+no ip dos ascend
+no ip dos chargen
+no ip dos fraggle
+no ip dos snork
+no ip dos ftp-bounce
+no ip dos tcp-intercept
+no ip dos broadcast-multicast-icmp
+no ip dos land
+no ip dos tcp-xmas-scan
+no ip dos tcp-null-scan
+no ip dos winnuke
+no ip dos tcp-fin-scan
+no ip dos udp-short-hdr
+no ip dos tcp-post-syn
+no ip dos tcphdrfrag
+no ip dos ip-ttl-zero
+no ip dos ipspoof
+no ip dos tcp-bad-sequence
+no ip dos tcp-sequence-past-window
+no ip-mac conflict
+no ip-mac routing conflict
+dhcp-offer-convert
+no stateful-packet-inspection-l2
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SMART-RF NAO MAPEADO PARA O DOMINIO RF
+
+>en
+#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+#rf-domain default
+#use smart-rf-policy default
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SMART RF ATIVADO MAS SEM POTENCIA DO RADIO AJUSTADA 2.4GHz
+
+>en
+#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+#smart-rf-policy default
+#assignable-power 2.4GHz max 17
+#assignable-power 2.4GHz min 10
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+AJUSTE DE CANAIS
+
+>en
+#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+#smart-rf-policy default
+#channel-list 2.4GHz 1,6,11
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESATIVAR TAXA DE DADOS B
+
+>en
+#config t
+#profile ap7532 default-ap7532
+#int radio 1
+#data-rates gn
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Desativar "Select Shutdown" na política smart rf (Aplica-se apenas às versões de firmware: 5.9.2.0, 5.9.2.1 e 5.9.2.2
+
+NA INTERFACE WING SIGA OS SEGUINTES PASSOS
+
+1 Go to Configuration
+2 Wireless
+3 SMART RF Policy
+4 Click on policy name
+5 Go to Select Shutdown
+6 Uncheck "Enable"  box
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Remova os canais DFS no rádio de 5GHz
+
+>en
+#conf t
+#smart-rf-policy <policy-name>
+#channel-list 5GHz 36,40,44,48,149,153,157,161,165
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Defina a largura do canal de rádio de 5GHz para 40 MHz. O Smart-RF converterá automaticamente a largura do canal para 20MHz se houver muita interferência:
+
+>en
+#conf t
+#smart-rf-policy <policy-name>
+#channel-width 5GHz 40MHz                                 
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Alguns clientes sem fio têm LDPC (Low Density Parity Check) ativado por padrão; no entanto, algumas versões de firmware WiNG têm esse recurso desativado por padrão e isso pode causar interrupções na conectividade. Nesse caso, habilite o LDPC no perfil AP:
+
+>en 
+#config
+#profile <ap model> <profile-name>   (Example: #profile ap510 default)
+#interface radio 2 
+#ldpc 
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Alguns clientes sem fio mais antigos não suportam o padrão 802.11ax que pode fazer com que eles não vejam o SSID ou o vejam, mas não sejam capazes de se conectar a ele em APs recém-implantados 802.11ax. Nesse caso, seria aconselhável desativar este padrão e testar
+
+>en
+#config t
+#profile <ap model> <profile-name>      (Example: #profile ap510 default)
+#interface radio 2
+#no 11axSupport
+#com wr
+#show context 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Se você está vendo muita interferência no rádio de 2,4 GHz e os clientes sem fio são capazes de 802.11an/ac/ax, você pode ativar a direção da banda ou desativar completamente o rádio de 2.4GHz e tê-los apenas conectados ao rádio 5GHz:
+
+>en
+#config t
+#profile <ap model> <profile-name>      (Example: #profile ap510 default)
+#interface radio 1
+#shutdown
+#com wr
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONFIGURAR DIREÇÃO DE BANDA
+
+https://extremeportal.force.com/ExtrArticleDetail?an=000082251
+
+
+

@@ -1,0 +1,18 @@
+1 criar todas as vlans que serao utilizadas >> SELF e PROFILE
+2 atribuir as vlans na interface do ethernet do ap >> SELF E PROFILE
+3 configurar endereço de ip padrão >> SELF
+4 configurar o default rfdomain  >> SELF E PROFILE
+5 criar os ssids que serao propagados 
+6 atribuir os ssids criados as interfaces de radio >> SELF E PROFILE
+7 configurar gateway  >> SELF E PROFILE
+8 configurar dns  >> SELF E PROFILE
+9 definir tipo de antena utilizada no ap se for antena externa >> SELF E PROFILE
+10 ativar virtual controller >> SELF 
+-----------------------------------------------------------------------------------
+
+DEFINIR GRUPO DE ANTENAS PARA APS DE ANTENA EXTERNA (ESSE COMANDO E NECESSARIO POIS SEM ESSA CONFIGURAÇÃO O RADIO NAO IRA OPERAR CORRETAMENTE)
+
+profile ap310 default-ap310 
+antenna-id external group-1 ml-2452-apa2-01
+antenna-id external group-2 ml-2452-apa2-02
+commit write

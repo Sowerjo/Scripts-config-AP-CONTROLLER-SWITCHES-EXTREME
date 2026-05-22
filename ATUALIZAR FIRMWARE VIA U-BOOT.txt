@@ -1,0 +1,42 @@
+COMANDOS VALIDOS PARA OS APs 650 E 6532
+---------------------------------------------------------------------------------------------------------------------------
+ENTRAR EM MODO DIAGNOSTICO
+digitar comando diag seguido da senha
+
+>diag 1024april25
+
+---------------------------------------------------------------------------------------------------------------------------
+CONFIGURAR SERVIDOR TFTP
+
+>setenv serverip 192.168.1.XX
+>setenv ipaddr 192.168.1.XX
+>setenv netmask 255.255.255.0
+>saveenv
+---------------------------------------------------------------------------------------------------------------------------
+MANDAR IMAGEM FIRMWARE PARA O AP VIA TFTP
+
+>progfw (firmware.img) (ip do servidor ftp) -f
+
+-f serve para nao apagar a memoria flash 
+---------------------------------------------------------------------------------------------------------------------------
+SEGUNDA FORMA DE MANDAR IMAGEM PARA O AP
+
+>tftpboot (nome do firmware)
+apos concluido mande
+>go 0x80100000
+ou
+>bootm 0x80100000 (se esse nao for o hex que apareceu no inicio do comando tftpboot substitua pelo o que apareceu)
+---------------------------------------------------------------------------------------------------------------------------
+>setenv image_name images/ICX/AP650-5.8.6.11-006R.img
+>saveenv
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+lcap> tftpboot 0x81000000 image.bin
+
+lcap> erase 0xbf020000 +0x7c0000
+
+lcap> cp.b 0x81000000 0xbf020000 0x7c0000
+
+lcap> bootm 0xbf020000

@@ -1,0 +1,42 @@
+CONFIGURAÇÃO INICIAL VIA CLI
+
+CRIANDO REDE WIRELESS
+
+self
+wlan (nome do perfil de rede)
+description (descrição da rede)
+ssid (nome de propagação)
+vlan 1
+bridging-mode local
+encryption-type ccmp
+authentication-type none
+wpa-wpa2 psk 0 (sua senha de 8 digitos ou mais)
+use wlan-qos-policy (nao e obrigatorio)
+commit
+commit write
+write memory
+---------------------
+ATRIBUINDO A REDE CRIADA A INTERFACE DE RADIO
+
+self
+interface radio 1
+wlan (nome do perfil de rede criado) bss 1 primary
+..
+interface radio 2 
+wlan (nome do perfil de rede criado) bss 1 primary~
+commit
+commit write
+write memory
+---------------------------------
+CONFIGURANDO RF-DOMAIN
+location brasil
+contact (seu contato)
+timezone etc/GMT-3
+country-code br
+commit
+commit write
+commit write memory
+
+
+
+
